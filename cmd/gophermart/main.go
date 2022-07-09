@@ -1,8 +1,5 @@
 package main
 
-<<<<<<< HEAD
-func main() {}
-=======
 import (
 	"context"
 	"fmt"
@@ -67,4 +64,3 @@ func main() {
 	log.Fatal(srv.ListenAndServe())
 
 }
->>>>>>> 475c9ce (Initial commit)
