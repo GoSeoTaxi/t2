@@ -10,9 +10,6 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
@@ -41,22 +38,24 @@ func main() {
 
 	// prepare handles
 	r := handlers.BonusRouter(ctx, db, cfg.Key, logger)
-
-	// handle service stop
 	srv := &http.Server{Addr: cfg.Endpoint, Handler: r}
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-	go func() {
-		sig := <-quit
-		logger.Info(fmt.Sprintf("caught sig: %+v", sig))
-		if err := srv.Shutdown(ctx); err != nil {
-			// Error from closing listeners, or context timeout:
-			logger.Error("HTTP server Shutdown:", zap.Error(err))
-		}
-	}()
 
+	/*
+		// handle service stop
+
+		quit := make(chan os.Signal)
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+		go func() {
+			sig := <-quit
+			logger.Info(fmt.Sprintf("caught sig: %+v", sig))
+			if err := srv.Shutdown(ctx); err != nil {
+				// Error from closing listeners, or context timeout:
+				logger.Error("HTTP server Shutdown:", zap.Error(err))
+			}
+		}()
+	*/
 	// run update status periodically
-	statusTicker := time.NewTicker(time.Duration(115) * time.Second)
+	statusTicker := time.NewTicker(time.Duration(30) * time.Second)
 	worker := app.NewWorker(ctx, logger, db, cfg)
 	go worker.UpdateStatus(statusTicker.C)
 
