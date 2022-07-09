@@ -1,19 +1,18 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/GoSeoTaxi/t1/internal/app"
 	"io/ioutil"
 	"net/http"
 
+	"context"
 	"github.com/GoSeoTaxi/t1/internal/models"
 	"github.com/GoSeoTaxi/t1/internal/storage"
 	"github.com/go-chi/jwtauth/v5"
-
-	"strings"
-
 	"go.uber.org/zap"
+	"strings"
 )
 
 type Handler struct {
