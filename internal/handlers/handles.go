@@ -7,10 +7,9 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/GoSeoTaxi/t1/internal/models"
+	"github.com/GoSeoTaxi/t1/internal/storage"
 	"github.com/go-chi/jwtauth/v5"
-	"maffka123gophermarktBonus/internal/app"
-	"maffka123gophermarktBonus/internal/models"
-	"maffka123gophermarktBonus/internal/storage"
 
 	"strings"
 

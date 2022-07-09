@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/GoSeoTaxi/t1/internal/config"
+	"github.com/GoSeoTaxi/t1/internal/models"
+	"github.com/GoSeoTaxi/t1/internal/storage"
 	"go.uber.org/zap"
-	"maffka123gophermarktBonus/internal/config"
-	"maffka123gophermarktBonus/internal/models"
-	"maffka123gophermarktBonus/internal/storage"
 	"net/http"
 	"time"
 )

@@ -3,13 +3,12 @@ package storage
 import (
 	"context"
 	"fmt"
+	"github.com/GoSeoTaxi/t1/internal/config"
+	"github.com/GoSeoTaxi/t1/internal/models"
 	"github.com/jackc/pgconn"
-	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.uber.org/zap"
 	"log"
-	"maffka123gophermarktBonus/internal/config"
-	"maffka123gophermarktBonus/internal/models"
 	"strings"
 	"time"
 )
