@@ -56,7 +56,7 @@ func main() {
 	}()
 
 	// run update status periodically
-	statusTicker := time.NewTicker(time.Duration(5) * time.Second)
+	statusTicker := time.NewTicker(time.Duration(115) * time.Second)
 	worker := app.NewWorker(ctx, logger, db, cfg)
 	go worker.UpdateStatus(statusTicker.C)
 
