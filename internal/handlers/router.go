@@ -34,7 +34,7 @@ func BonusRouter(ctx context.Context, db storage.DBinterface, secret string, log
 		})
 
 		r.With(jwtauth.Authenticator).Post("/withdraw", Conveyor(mh.HandlerPostWithdraw(), unpackGZIP))
-		r.With(jwtauth.Authenticator).Get("/withdrawals", Conveyor(mh.HandlerPostWithdraw(), unpackGZIP))
+		r.With(jwtauth.Authenticator).Get("/withdrawals", Conveyor(mh.HandlerGetWithdrawals(), unpackGZIP))
 
 	})
 
