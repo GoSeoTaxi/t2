@@ -40,7 +40,7 @@ type PGDB struct {
 }
 
 // InitDB initialized pg connection and creates tables
-func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger, bp string) (*PGDB, error) {
+func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger) (*PGDB, error) {
 	db := PGDB{
 		path: cfg.DBpath,
 		log:  logger,

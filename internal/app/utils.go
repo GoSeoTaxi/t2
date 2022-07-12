@@ -6,16 +6,16 @@ import (
 	"fmt"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/theplant/luhn"
-	"path"
-	"runtime"
 	"strconv"
 )
 
+/*
 // GetBasePath prepares base path of the project.
 func GetBasePath() string {
 	_, b, _, _ := runtime.Caller(0)
 	return path.Dir(path.Dir(path.Dir(b)))
 }
+*/
 
 // ComparePass compares hashed passwords.
 func ComparePass(expected string, actual string) bool {
