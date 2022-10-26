@@ -61,7 +61,7 @@ func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger) (*PGDB,
 
 	defer tx.Rollback(ctx)
 
-	//Кажется вот тут Илья Сухов имел ввиду добавить recovery
+	//Кажется вот тут Илья Сухов имел ввиду добавить recovery...
 
 	for _, q := range strings.Split(CreateDB, ";") {
 		q := strings.TrimSpace(q)
