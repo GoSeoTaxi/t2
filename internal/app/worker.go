@@ -30,6 +30,7 @@ func NewWorker(ctx context.Context, logger *zap.Logger, db storage.DBinterface, 
 
 // UpdateStatus acts as worker that can update status of an order
 func (w *Worker) UpdateStatus(t <-chan time.Time) {
+
 	client := &http.Client{}
 	for {
 		select {

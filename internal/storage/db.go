@@ -58,7 +58,10 @@ func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger) (*PGDB,
 	if err != nil {
 		return nil, fmt.Errorf("cannot connect to db: %v", err)
 	}
+
 	defer tx.Rollback(ctx)
+
+	//Кажется вот тут Илья Сухов имел ввиду добавить recovery
 
 	for _, q := range strings.Split(CreateDB, ";") {
 		q := strings.TrimSpace(q)
