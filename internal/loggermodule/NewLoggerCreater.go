@@ -1,4 +1,4 @@
-package LoggerModule
+package loggermodule
 
 import (
 	"log"

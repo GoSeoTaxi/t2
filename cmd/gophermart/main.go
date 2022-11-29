@@ -10,10 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/GoSeoTaxi/t1/internal/LoggerModule"
 	"github.com/GoSeoTaxi/t1/internal/app"
 	"github.com/GoSeoTaxi/t1/internal/config"
 	"github.com/GoSeoTaxi/t1/internal/handlers"
+	"github.com/GoSeoTaxi/t1/internal/loggermodule"
 	"github.com/GoSeoTaxi/t1/internal/storage"
 	"go.uber.org/zap"
 )
@@ -25,7 +25,7 @@ func main() {
 	cfg := config.NewConfig()
 
 	// init New logger
-	logger := LoggerModule.NewLogger(cfg)
+	logger := loggermodule.NewLogger(cfg)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
