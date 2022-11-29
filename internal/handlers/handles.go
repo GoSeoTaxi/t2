@@ -3,16 +3,18 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/GoSeoTaxi/t1/internal/app"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/GoSeoTaxi/t1/internal/app"
+
 	"context"
+	"strings"
+
 	"github.com/GoSeoTaxi/t1/internal/models"
 	"github.com/GoSeoTaxi/t1/internal/storage"
 	"github.com/go-chi/jwtauth/v5"
 	"go.uber.org/zap"
-	"strings"
 )
 
 type Handler struct {
@@ -21,8 +23,8 @@ type Handler struct {
 	ctx    context.Context
 }
 
-func NewHandler(ctx context.Context, db storage.DBinterface, logger *zap.Logger) Handler {
-	return Handler{
+func NewHandler(ctx context.Context, db storage.DBinterface, logger *zap.Logger) *Handler {
+	return &Handler{
 		db:     db,
 		logger: logger,
 		ctx:    ctx,
@@ -80,11 +82,12 @@ func (h *Handler) HandlerPostLogin(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc 
 
 		pass, err := h.db.SelectPass(h.ctx, &u)
 
+		if err != nil {
+			http.Error(w, fmt.Sprintf("500 - Internal error: %s", err), http.StatusInternalServerError)
+			return
+		}
 		if pass == nil || !app.ComparePass(*pass, u.Password) {
 			http.Error(w, fmt.Sprintf("401 - user or password are wrong: %s", err), http.StatusUnauthorized)
-			return
-		} else if err != nil {
-			http.Error(w, fmt.Sprintf("500 - Internal error: %s", err), http.StatusInternalServerError)
 			return
 		}
 
