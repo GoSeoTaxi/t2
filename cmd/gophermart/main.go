@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/GoSeoTaxi/t1/internal/Logger"
+	"github.com/GoSeoTaxi/t1/internal/LoggerModule"
 	"github.com/GoSeoTaxi/t1/internal/app"
 	"github.com/GoSeoTaxi/t1/internal/config"
 	"github.com/GoSeoTaxi/t1/internal/handlers"
@@ -25,7 +25,7 @@ func main() {
 	cfg := config.NewConfig()
 
 	// init New logger
-	logger := Logger.NewLogger(cfg)
+	logger := LoggerModule.NewLogger(cfg)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -57,9 +57,10 @@ func main() {
 		case sig := <-quit:
 			logger.Info(fmt.Sprintf("caught sig: %+v", sig))
 			logger.Info("Microservice stopped successful!")
-			break
+			return
 		default:
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
+
 }
