@@ -50,9 +50,9 @@ func main() {
 	go log.Fatal(srv.ListenAndServe())
 
 	// handle service stop
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	for {
+		quit := make(chan os.Signal)
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 		select {
 		case sig := <-quit:
 			logger.Info(fmt.Sprintf("caught sig: %+v", sig))

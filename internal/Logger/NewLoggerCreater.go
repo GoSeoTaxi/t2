@@ -9,7 +9,7 @@ import (
 
 func NewLogger(cfg *config.Config) *zap.Logger {
 
-	logger, err := initLogger(cfg.Debug, cfg.AppName)
+	logger, err := newLogger(cfg.Debug, cfg.AppName)
 	if err != nil {
 		log.Fatalf("can't initialize zap logger: %v", err)
 	}
@@ -20,7 +20,7 @@ func NewLogger(cfg *config.Config) *zap.Logger {
 }
 
 // InitLogger configures zap logger
-func initLogger(debug bool, projectID string) (*zap.Logger, error) {
+func newLogger(debug bool, projectID string) (*zap.Logger, error) {
 	zapConfig := zap.NewProductionConfig()
 	zapConfig.EncoderConfig.LevelKey = "severity"
 	zapConfig.EncoderConfig.MessageKey = "message"
