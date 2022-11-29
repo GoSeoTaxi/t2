@@ -3,32 +3,30 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/GoSeoTaxi/t1/internal/app"
-	"github.com/GoSeoTaxi/t1/internal/config"
-	"github.com/GoSeoTaxi/t1/internal/handlers"
-	"github.com/GoSeoTaxi/t1/internal/storage"
-	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/GoSeoTaxi/t1/internal/app"
+	"github.com/GoSeoTaxi/t1/internal/config"
+	"github.com/GoSeoTaxi/t1/internal/handlers"
+	"github.com/GoSeoTaxi/t1/internal/loggermodule"
+	"github.com/GoSeoTaxi/t1/internal/storage"
+	"go.uber.org/zap"
 )
 
 func main() {
-	fmt.Print("starting...")
-	cfg, err := config.InitConfig()
-	if err != nil {
-		log.Fatalf("can't load config: %v", err)
-	}
+	fmt.Println("starting...")
 
-	logger, err := config.InitLogger(cfg.Debug, cfg.AppName)
-	if err != nil {
-		log.Fatalf("can't initialize zap logger: %v", err)
-	}
+	// init Config
+	cfg := config.NewConfig()
 
-	logger.Info("initializing the service...")
+	// init New logger
+	logger := loggermodule.NewLogger(cfg)
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -43,24 +41,26 @@ func main() {
 	r := handlers.BonusRouter(ctx, db, cfg.Key, logger)
 	srv := &http.Server{Addr: cfg.Endpoint, Handler: r}
 
-	// handle service stop
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-	go func() {
-		sig := <-quit
-		logger.Info(fmt.Sprintf("caught sig: %+v", sig))
-		if err := srv.Shutdown(ctx); err != nil {
-			// Error from closing listeners, or context timeout:
-			logger.Error("HTTP server Shutdown:", zap.Error(err))
-		}
-	}()
-
 	// run update status periodically
 	statusTicker := time.NewTicker(time.Duration(1) * time.Second)
 	worker := app.NewWorker(ctx, logger, db, cfg)
 	go worker.UpdateStatus(statusTicker.C)
 
 	logger.Info("Start serving on", zap.String("endpoint name", cfg.Endpoint))
-	log.Fatal(srv.ListenAndServe())
+	go log.Fatal(srv.ListenAndServe())
+
+	// handle service stop
+	for {
+		quit := make(chan os.Signal, 3)
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+		select {
+		case sig := <-quit:
+			logger.Info(fmt.Sprintf("caught sig: %+v", sig))
+			logger.Info("Microservice stopped successful!")
+			return
+		default:
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
 
 }
