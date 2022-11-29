@@ -51,7 +51,7 @@ func main() {
 
 	// handle service stop
 	for {
-		quit := make(chan os.Signal)
+		quit := make(chan os.Signal, 3)
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 		select {
 		case sig := <-quit:
